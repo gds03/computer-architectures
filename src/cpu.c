@@ -4,7 +4,6 @@
 */
 
 #include <stdio.h>
-#include <Windows.h>
 
 #define DIM_RAM 256
 #define DIM_CODE 2048
@@ -53,7 +52,7 @@ word PC;				// Program Counter
 /* PC -  holds the address of nxt instruction to be executed. */
 void RESET() { PC = 0; }
 void INC_PC() { PC = (PC + 1) & 0x7FF; }				// & 0111 1111 1111
-byte RDC() { MAR = CODE[PC]; return MAR; }							// Read Code -> MAR = Code[PC]
+void RDC() { MAR = CODE[PC]; }							// Read Code -> MAR = Code[PC]
 void LD_MBR_PC0_7() { MBR = PC & 0xFF; }				// Carrega parte baixa (2 bytes do PC) para MBR
 void LD_MBR_PC8_10() { MBR = ( PC & 0x700 ) >> 8; }		// Carrega parte alta (3 bits do PC) para MBR
 
@@ -120,11 +119,9 @@ void ALU()
 	Fetch
 */
 
-byte fetch()
+void fetch()
 {
-	byte code;
-
-	code = RDC();
+	RDC();				// MAR = CODE[PC]
 	INC_PC();
 	LD_IR_MAR();
 	if ( DOIS_BYTES() )
@@ -132,8 +129,6 @@ byte fetch()
 		RDC();
 		INC_PC();
 	}
-
-	return code;
 }
 
 /* Fase Execute */
@@ -152,9 +147,9 @@ void execute()
 		break;	 // .. a funcionar
 
 	case instr2:					   // MOV Rn, addr
-		RDD();
-		LD_MAR_IR0_1();
-		WDR();
+		RDD();				// MBR = RAM[MAR]
+		LD_MAR_IR0_1();		// MAR = Rn
+		WDR();				// REG[Rn] = MBR
 		break;	 // .. a funcionar
 
 	case instr3:					  // MOV Rn, #const8
@@ -243,6 +238,10 @@ void execute()
 		DEC_MAR();
 		RDD();
 		LD_PC_SP_ALL();
+
+		// Comment this line, is for debug purposes..
+		printf("Current value: %d \n", RAM[0]);
+
 		break;	// .. a funcionar
 	}
 }
@@ -252,7 +251,6 @@ void execute()
 void loadProgram()	
 {	
 	// Instructions codification
-	ZeroMemory(CODE, DIM_CODE);
 
 	CODE[0] = 0X42;		//					0100 0010 (instruction - opcode) (register 2)
 	CODE[1] = 0X02;		// MOV R2, ADDR2	0000 0010 (address 2)
@@ -297,6 +295,8 @@ void loadProgram()
 	
 	CODE[26] = 0XE0;	//
 	CODE[27] = 0XFE;	// SJMP $
+
+	// If we get here we must to stop..		 /!\
 	
 	CODE[28] = 0X40;	//				-> LABEL SOMA
 	CODE[29] = 0X00;	// MOV R0, ADDR0
@@ -318,78 +318,13 @@ void loadProgram()
 	CODE[39] = 0X00;	// MOV ADDR0, R2
 	
 	CODE[40] = 0X10;	// RET
-
-	/*
-	 	// MOV addr, Rn			  .. move para o endereço RAM[0] o conteudo de REG[1] supondo que REG[1] = 5;
-	CODE[0] = 0x01;	// R1	  	   
-	CODE[1] = 0x00;	// RAM[0]
-	REG[1] = 0x05;	// REG[1] = 5;
-		// **** //
-			  
-		// MOV Rn, addr			  .. move para REG[1] o conteudo da RAM[0];
-	CODE[2] = 0x41;
-	CODE[3] = 0x00;
-		// **** //
-	
-	    // MOV Rn, #const8        .. move para o REG[2] o valor do que está no 2ºByte (que e 5); 
-	CODE[4] = 0x22;
-	CODE[5] = 0x05;
-		// **** //
-	
-		// MOV Rn, @Rm			  .. move para o REG[3] o apontado por REG[1];
-	CODE[6] = 0x37;
-	RAM[5] = 0x20;
-		// **** //
-	
-	   // ADD Rn, Rm			  .. soma o REG[1] + Reg[2];
-	CODE[7] = 0xB6; 
-	   // **** //
-	
-	   // SUB Rn, Rm			  .. Subtrai o REG[1] - Reg[2];
-	CODE[8] = 0x96;
-	   // **** //
-	
-	   // JNZ Rn, Offset8         .. Se Rn nao for zero, PC = PC + Offset;
-	CODE[9] = 0xA1 ;
-	CODE[10] = 0x00;
-		// **** //
-	
-		// DJNZ Rn, Offset8		  .. Igual ao JNZ mas á um decremento antes;
-	REG[0] = 0x05;
-	CODE[11] = 0x81;			  
-	CODE[12] = 0x00;
-		// **** //
-
-		// PUSH Rn				  .. mete na pilha o Rn e em seguida incrementa o stack para a prox. posição
-	CODE[13] = 0xF1;
-		// **** //
-		
-		// POP Rn 				  .. Decrementa o stack e coloca no Rn o apontado pelo stack
-    CODE[14] = 0xD3;
-		// **** //
-
-		// SJMP Offset8			  .. Salta para Pc+Offset (PC = PC + Offset)
-	CODE[15] = 0xE0;					  
-	CODE[16] = 0x00;
-		// **** //
-
-		// LCALL c_addr			  .. Colocar no SP o PC (parte baixa e alta), colocar tmb no PC o c_addr que se situa no IR (3bits + a direita) e os 8 q estao no TMP
-	CODE[17] = 0xC0;
-	CODE[18] = 0x13;
-
-		// RET					  .. Decrementa o SP e coloca no PC o apontado por SP
-	CODE[19] = 0x10;
-		// **** /
-		*/
 }
 
 void cpu()
 {
    for ( ; ; )
    {
-     if( !fetch() )
-		 break;
-
+     fetch();
      execute();
    }
 }
@@ -409,6 +344,7 @@ void main()
 	loadProgram();
 	initArray();
 	cpu();
+
 
 	printf("Please hit some key to close the program");
 	getchar();
