@@ -1,13 +1,13 @@
-mov r2, addr2	; r2 = 100
-mov r3, #100	; r3 = 100 (variavel de controlo DJNZ)
-mov r1, #0		; r1 = 0 (indice)
+mov r2, addr2	; r2 = 100  --- OK
+mov r3, #100	; r3 = 100 (variavel de controlo DJNZ) --- OK
+mov r1, #0		; r1 = 0 (indice) --- OK
 
 FOR:
 
-mov r0, @r2		; r0 = 102
-mov addr3, r0	; addr3 = 102
-sub r0, r1		;
-jnz r0, SOMALAB	; if (arrayA[i] != i)
+mov r0, @r2		; r0 = 102 		--- OK
+mov addr3, r0	; addr3 = 102 	--- OK
+sub r0, r1		;				--- OK
+jnz r0, SOMALAB	; if (arrayA[i] != i) --- OK
 
 SOMALAB: lcall SOMA	; soma(char elemento, char c);
 
@@ -22,7 +22,7 @@ sjmp $
 
 
 SOMA:
-mov r0, addr0	; r0 = 0
+mov r0, addr0	; r0 = 0 		--- OK
 mov r1, addr3 	; r1 = 102
 add r0, r1		; r0 = 102
 mov addr1, r0	; addr1 = 102
