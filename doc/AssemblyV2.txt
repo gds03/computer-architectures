@@ -45,7 +45,7 @@ sjmp FOR_LOOP
 
 ---
 
-Function SOMA (recebe array[i] e c nos argumentos)
+Function SOMA (receives by parameters array[i] and c)
 
 ---
 
