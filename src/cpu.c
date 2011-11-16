@@ -4,6 +4,7 @@
 */
 
 #include <stdio.h>
+#include "convertions.h"
 
 #define DIM_RAM 256
 #define DIM_CODE 2048
@@ -11,6 +12,7 @@
 #define word unsigned int
 
 #define RAM_OFFSET 100
+
 
 
 /* 
@@ -100,6 +102,8 @@ void DEC_MBR() { MBR = MBR - 1; }
 /* Others... */
 byte DOIS_BYTES() { return ((IR >> 4) & 0x01) == 0; }
 byte FLAG_ZERO() { return A; }
+
+
 
 /* ALU */
 
@@ -252,74 +256,136 @@ void execute()
 
 void loadProgram()	
 {	
-	// Instructions codification
+	//
+	//  -- Pass position of the array to ACUMULA --
 
-	CODE[0] = 0X42;		//					0100 0010 (instruction - opcode) (register 2)
-	CODE[1] = 0X02;		// MOV R2, ADDR2	0000 0010 (address 2)
-	
-	CODE[2] = 0X23;		//
-	CODE[3] = 0X64;		// MOV R3, #100
-	
-	CODE[4] = 0X21;		//
-	CODE[5] = 0X00;		// MOV R1, #0
-	
-	CODE[6] = 0X38;     // MOV R0, @R2 -> LABEL FOR
-	
-	CODE[7] = 0X00;		//
-	CODE[8] = 0X03;     // MOV ADDR3, R0
-	
-	CODE[9] = 0X94;		// SUB R0, R1
-	
-	CODE[10] = 0XA0;	//
-	CODE[11] = 0X00;	// JNZ R0, SOMALAB
-	
-	CODE[12] = 0XC0;	// 			  -> LABEL SOMALAB
-	CODE[13] = 0X1C;	// LCALL SOMA
-	
-	CODE[14] = 0X22;	//
-	CODE[15] = 0X01;	// MOV R2, #1
-	
-	CODE[16] = 0XB9;	// ADD R1, R2
-	
-	CODE[17] = 0X20;	//
-	CODE[18] = 0X01;	// MOV R0, #1	 
-	
-	CODE[19] = 0X42;	//
-	CODE[20] = 0X02;	// MOV R2, ADDR2
-	
-	CODE[21] = 0XB2;	// ADD R2, R0     
-	
-	CODE[22] = 0X02;	//
-	CODE[23] = 0X02;	// MOV ADDR2, R2
-	
-	CODE[24] = 0X83;	//
-	CODE[25] = 0XEC;	// DJNZ R3, FOR	   // verificar..
-	
-	CODE[26] = 0XE0;	//
-	CODE[27] = 0XFE;	// SJMP $
+	// mov r0, #100 (2 instructions)
+	CODE[0] = convDecimal("11110000");
+	CODE[1] = 100;
 
-	// If we get here we must to stop..		 /!\
+	// push r0 (1 instruction)
+	CODE[2] = convDecimal("11110000");
+
+
+	//
+	// -- Function ACUMULA (receives by parameter pointer to array) --
+
+	// pop r0 (1 instruction)
+	CODE[3] = convDecimal("11010000");
+
+	// mov addr0, r0
+	CODE[4] = convDecimal("00000000");
+	CODE[5] = 0;
+
+	// mov r0, #0 (2 instructions)
+	CODE[6] = convDecimal("00100000");
+	CODE[7] = 0;
+
+	// mov addr1, r0 (2 instructions)
+	CODE[8] = convDecimal("00000000");
+	CODE[9] = 1;
+
+	// mov r1, #100 (2 instructions)
+	CODE[10] = convDecimal("00100001");
+	CODE[11] = 100;
+
+	//
+	// FOR_LOOP
+
+	// djnz r1, LOOP_INSIDE (2 instructions)
+	CODE[12] = convDecimal("10000001");
+	CODE[13] = 2;
+
+	//
+	// EPILOGUE
+
+	// sjmp $ (2 instructions)
+	CODE[14] = convDecimal("11100000");
+	CODE[15] = 0xFE;
+
+	//
+	// LOOP_INSIDE
+
+	// mov r2, addr0 (2 instructions)
+	CODE[16] = convDecimal("01000010");
+	CODE[17] = 0;
+
+	// add r2, r1 (1 instruction)
+	CODE[18] = convDecimal("10110110");
+
+	// mov r3, @r2 (1 instruction)
+	CODE[19] = convDecimal("00111011");
+
+	// push r3	(1 instruction)
+	CODE[20] = convDecimal("11110011");
+
+	// pop r2 (1 instruction)
+	CODE[21] = convDecimal("11010010");
+
+	// sub r2, r1 (1 instruction)
+	CODE[22] = convDecimal("10010110");
+
+	// jnz r2, IF_INSIDE (2 instructions)
+	CODE[23] = convDecimal("10100010");
+	CODE[24] = 2;
+
+	// sjmp FOR_LOOP (2 instructions)
+	CODE[25] = convDecimal("11100000");
+	CODE[26] = convDecimal("11110001");		// Move 15 units backward
+
+	// 
+	// IF_INSIDE
+
+	// mov r0, addr1 (2 instructions)
+	CODE[27] = convDecimal("01000000");
+	CODE[28] = 1;
+
+	// push r0 (1 instruction)
+	CODE[29] = convDecimal("11110000");
+
+	// push r3 (1 instruction)
+	CODE[30] = convDecimal("11110011");
+
+	// lcall SOMA (2 instructions)
+	CODE[31] = convDecimal("11000000");
+	CODE[32] = 37;
+
+	// mov addr1, r0 (2 instructions)
+	CODE[33] = convDecimal("00000000");
+	CODE[34] = 1;
+
+	// sjmp FOR_LOOP (2 instructions)
+	CODE[35] = convDecimal("11100000");
+	CODE[36] = convDecimal("11100111");		// Move 25 units backward
+
+
+	//
+	// -- Function SOMA (receives by parameters array[i] and c) --
+
+	//
+	// Soma
+
+	// pop r2 (1 instruction)
+	CODE[37] = convDecimal("11010010");
+
+	// pop r3 (1 instruction)
+	CODE[38] = convDecimal("11010011");
+
+	// pop r0 (1 instruction)
+	CODE[39] = convDecimal("11010000");
+
+	// add r0, r3 (1 instruction)
+	CODE[40] = convDecimal("10111100");
+
+	// push r2 (1 instruction)
+	CODE[41] = convDecimal("11110010");
+
+	// ret (1 instruction)
+	CODE[42] = convDecimal("00010000");
+
+
 	
-	CODE[28] = 0X40;	//				-> LABEL SOMA
-	CODE[29] = 0X00;	// MOV R0, ADDR0
-	
-	CODE[30] = 0X42;	//
-	CODE[31] = 0X03;	// MOV R2, ADDR3
-	
-	CODE[32] = 0XB8;	// ADD R0, R2
-	
-	CODE[33] = 0X00;	//
-	CODE[34] = 0X01;	// MOV ADDR1, R0
-	
-	CODE[35] = 0X42;	//
-	CODE[36] = 0X00;	// MOV R2, ADDR0
-	
-	CODE[37] = 0XB2; 	// ADD R2, R0
-	
-	CODE[38] = 0X02;	//
-	CODE[39] = 0X00;	// MOV ADDR0, R2
-	
-	CODE[40] = 0X10;	// RET
+
 }
 
 void cpu()
