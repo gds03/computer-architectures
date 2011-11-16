@@ -1,8 +1,8 @@
 
 -- Pass position of the array to ACUMULA --
 
-mov r0, #100		; memory pointer of array						<- 
-push r0				; enqueue										<-
+mov r0, #100		; memory pointer of array						<- 1
+push r0				; enqueue										<- 2 
 
 ---
 
@@ -10,40 +10,40 @@ Function ACUMULA (receives by parameter pointer to array)
 
 ---
 
-pop r0				; dequeue - recieve the start position of array <-
-mov addr0, r0		; saves RAM[0] the start index of array			<-
+pop r0				; dequeue - recieve the start position of array <- 3
+mov addr0, r0		; saves RAM[0] the start index of array			<- 4
 
-mov r0, #0															<-
-mov addr1, r0		; saves RAM[1] the c variable currently 0		<-
-mov r1, #100		; local variable i (inverse order)				<- 
+mov r0, #0															<- 5
+mov addr1, r0		; saves RAM[1] the c variable currently 0		<- 6
+mov r1, #100		; local variable i (inverse order)				<- 7
 
 
 FOR_LOOP:
 
-djnz r1, LOOP_INSIDE ; break condition of for						<-
+djnz r1, LOOP_INSIDE ; break condition of for						<- 8
 EPILOGUE:			
 sjmp $				; here we must consult RAM[1]					<-
 
 
 LOOP_INSIDE:
-mov r2, addr0		; r2 is used as base, to add with the index		<-
-add r2, r1			; base + i										<-
-mov r3, @r2			; r3 contains array[i]							<-
+mov r2, addr0		; r2 is used as base, to add with the index		<- 9
+add r2, r1			; base + i										<- 10
+mov r3, @r2			; r3 contains array[i]							<- 11
 
-push r3																<-
-pop r2				; r2 is just to make the compare				<-
+push r3																<- 12
+pop r2				; r2 is just to make the compare				<- 13
 
-sub r2, r1															<-
-jnz r2, IF_INSIDE	; array[i] - i != 0								<-
+sub r2, r1															<- 14
+jnz r2, IF_INSIDE	; array[i] - i != 0								<- 15
 sjmp FOR_LOOP														<-
 
 IF_INSIDE:
-mov r0, addr1		; r0 contains now the current c					<-
-push r0				; enqueue - c									<-
-push r3				; enqueue - array[i]							<-
-lcall SOMA			; enqueue - pc									<-
-mov addr1, r0		; (c = SOMA(array[i], c))						<-		
-sjmp FOR_LOOP														<-
+mov r0, addr1		; r0 contains now the current c					<- 16
+push r0				; enqueue - c									<- 17
+push r3				; enqueue - array[i]							<- 18
+lcall SOMA			; enqueue - pc									<- 19
+mov addr1, r0		; (c = SOMA(array[i], c))						<- 28	
+sjmp FOR_LOOP														<- 29
 
 
 ---
@@ -53,14 +53,17 @@ Function SOMA (receives by parameters array[i] and c)
 ---
 
 SOMA:
-pop r2				; dequeue - pc (we need this to get the parameters) <-
-pop r3				; dequeue - array[i]								<-
-pop r0				; dequeue - c										<-
+pop r2				; discart high part of pc (not used)				<- 20
+pop r2				; dequeue - pc (we need this to get the parameters) <- 21
+pop r3				; dequeue - array[i]								<- 22
+pop r0				; dequeue - c										<- 23
 
-add r0, r3			; SUM is made here and is restored on r0!			<-
+add r0, r3			; SUM is made here and is restored on r0!			<- 24
 
-push r2				; enqueue - pc (restore program counter)			<-
-ret					; dequeue - pc										<-
+mov r3, #0																<- 25
+push r2				; enqueue - pc (restore program counter)
+push r3				; enqueue - restore high part with nothing to align <- 26
+ret					; dequeue - pc										<- 27
 
 
 

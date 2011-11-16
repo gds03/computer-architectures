@@ -244,10 +244,6 @@ void execute()
 		DEC_MAR();
 		RDD();
 		LD_PC_SP_ALL();
-
-		// Comment this line, is for debug purposes..
-		printf("Current value: %d \n", RAM[0]);
-
 		break;	// .. a funcionar
 	}
 }
@@ -260,7 +256,7 @@ void loadProgram()
 	//  -- Pass position of the array to ACUMULA --
 
 	// mov r0, #100 (2 instructions)
-	CODE[0] = convDecimal("11110000");
+	CODE[0] = convDecimal("00100000");
 	CODE[1] = 100;
 
 	// push r0 (1 instruction)
@@ -368,20 +364,30 @@ void loadProgram()
 	// pop r2 (1 instruction)
 	CODE[37] = convDecimal("11010010");
 
+	// pop r2 (1 instruction)
+	CODE[38] = convDecimal("11010010");
+
 	// pop r3 (1 instruction)
-	CODE[38] = convDecimal("11010011");
+	CODE[39] = convDecimal("11010011");
 
 	// pop r0 (1 instruction)
-	CODE[39] = convDecimal("11010000");
+	CODE[40] = convDecimal("11010000");
 
 	// add r0, r3 (1 instruction)
-	CODE[40] = convDecimal("10111100");
+	CODE[41] = convDecimal("10111100");
 
-	// push r2 (1 instruction)
-	CODE[41] = convDecimal("11110010");
+	// mov r3, #0 (2 instructions)
+	CODE[42] = convDecimal("00100011");
+	CODE[43] = 0;
+
+	// push r2	(1 instruction) 
+	CODE[44] = convDecimal("11110010");
+
+	// push r3 (1 instruction)
+	CODE[45] = convDecimal("11110011");
 
 	// ret (1 instruction)
-	CODE[42] = convDecimal("00010000");
+	CODE[46] = convDecimal("00010000");
 
 
 	
@@ -401,7 +407,7 @@ void initArray()
 {
 	int i;
 	for( i = 0; i <= 99; i++ ) {
-		RAM[RAM_OFFSET + i] = i;
+		RAM[RAM_OFFSET + i] = i + 1;
 	}
 }
 
