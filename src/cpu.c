@@ -43,12 +43,12 @@
 byte A;					// Acumulator
 byte SP;				// Stack Pointer 			
 byte MAR;				// Memory *** Address *** Register  
-byte MBR;				// Memory *** Buffer *** Register   - stores the data being transferred to and from the immediate access store
+word MBR;				// Memory *** Buffer *** Register   - stores the data being transferred to and from the immediate access store
 byte IR;				// Instruction Register		
 byte TMP;				// Temp Register
 
-byte RAM[DIM_RAM];		// RAM
-byte REG[4];			// Registers [0..3]
+word RAM[DIM_RAM];		// RAM
+word REG[4];			// Registers [0..3]
 byte CODE[DIM_CODE];	// CODE
 word PC;				// Program Counter 	
 
@@ -438,7 +438,7 @@ void main()
 	initArray();
 	cpu();
 
-	printf("Result value: %c \n", RAM[1]);
+	printf("Result value: %d \n", RAM[1]);
 	printf("Please hit some key to close the program");
 	getchar();
 }
