@@ -10,6 +10,8 @@
 #define byte unsigned char
 #define word unsigned int
 
+#define RAM_OFFSET 100
+
 
 /* 
 	Opcode
@@ -332,9 +334,9 @@ void cpu()
 void initArray()	  
 {
 	int i;
-	for( i = 100; i <= 199; i++ )
-		RAM[i] = i+2;
-	RAM[2] = 100;		
+	for( i = 0; i <= 99; i++ ) {
+		RAM[RAM_OFFSET + i] = i;
+	}
 }
 
 void main()
