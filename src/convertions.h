@@ -1,15 +1,6 @@
 #include <windows.h>
 
-byte 
-potential(__in byte index)
-{
-	byte result = 1;
-
-	for( ; index > 0; index--)
-		result *= 2;
-
-	return result;
-}
+byte potential(__in byte index) { return 1 << index; }
 
 byte 
 convDecimal(__in const char* ptr)

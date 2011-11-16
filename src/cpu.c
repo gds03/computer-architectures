@@ -21,20 +21,20 @@
 	Opcode
 */
 
-#define instr1 0x00		// 0000
-#define instr2 0x04		// 0100
-#define instr3 0x02		// 0010
-#define instr4 0x03		// 0011
-#define instr5 0x0B		// 1011
-#define instr6 0x09		// 1001
-#define instr7 0x0A		// 1010
-#define instr8 0x08		// 1000
-#define instr9 0x0F		// 1111
-#define instr10 0x0D	// 1101
-#define instr11 0x0E	// 1110
-#define instr12 0x0C	// 1100
-#define instr13 0x01	// 0001
-#define stop 0x05		// 0101
+#define mov_addr_rn 0x00		// 0000
+#define mov_rn_addr 0x04		// 0100
+#define mov_rn_const8 0x02		// 0010
+#define mov_rn_ptrRm 0x03		// 0011
+#define add_rn_rm 0x0B			// 1011
+#define sub_rn_rm 0x09			// 1001
+#define jnz_rn_offset8 0x0A		// 1010
+#define djnz_rn_offset8 0x08	// 1000
+#define push_rn 0x0F			// 1111
+#define pop_rn 0x0D				// 1101
+#define sjmp_offset8 0x0E		// 1110
+#define lcall_caddr 0x0C		// 1100
+#define ret 0x01				// 0001
+#define hack_to_stop 0x05		// 0101
 
 /* 
 	Registers
@@ -50,8 +50,10 @@ byte TMP;				// Temp Register
 byte RAM[DIM_RAM];		// RAM
 byte REG[4];			// Registers [0..3]
 byte CODE[DIM_CODE];	// CODE
-word PC;				// Program Counter 			
-word SHUTDOWN;
+word PC;				// Program Counter 	
+
+
+word SHUTDOWN;			// PROGRAM CONTROL
 
 /* 
 	Operators From EFI
@@ -116,10 +118,10 @@ void ALU()
 {
     switch ((IR >> 4) & 0x0F)
 	{
-      case instr5 :
+      case add_rn_rm :
         MBR = MBR + A;
         break;
-      case instr6 :
+      case sub_rn_rm :
         MBR = MBR - A;
         break;
       default: MBR = A;
@@ -149,7 +151,7 @@ void execute()
 {
   switch ((IR >> 4) & 0x0F)
   {
-  	case instr1:	   					// MOV addr, Rn
+  	case mov_addr_rn:	   					// MOV addr, Rn
 		LD_A_MAR();
 		LD_MAR_IR0_1();
 		RDR();
@@ -157,19 +159,19 @@ void execute()
 		WDD();
 		break;	 // .. a funcionar
 
-	case instr2:					   // MOV Rn, addr
+	case mov_rn_addr:					   // MOV Rn, addr
 		RDD();				// MBR = RAM[MAR]
 		LD_MAR_IR0_1();		// MAR = Rn
 		WDR();				// REG[Rn] = MBR
 		break;	 // .. a funcionar
 
-	case instr3:					  // MOV Rn, #const8
+	case mov_rn_const8:					  // MOV Rn, #const8
 		LD_MBR_MAR();
 		LD_MAR_IR0_1();
 		WDR();
 		break;	 // .. a funcionar
 
-	case instr4:					  // MOV Rn, @Rm
+	case mov_rn_ptrRm:					  // MOV Rn, @Rm
 		LD_MAR_IR3_2();		// MAR = Rm
 		RDR();				// MBR = REG[MAR]
 		LD_MAR_MBR();		// MAR = MBR
@@ -178,8 +180,8 @@ void execute()
 		WDR();				// Rn = MBR (RAM[MAR])
 		break;	// .. a funcionar
 
-	case instr5:					  // ADD Rn, Rm
-	case instr6:					  // SUB  Rn, Rm
+	case add_rn_rm:					  // ADD Rn, Rm
+	case sub_rn_rm:					  // SUB  Rn, Rm
 		LD_MAR_IR3_2();
 		RDR();
 		LD_A_MBR();
@@ -189,7 +191,7 @@ void execute()
 		WDR();
 		break;  // .. a funcionar
 
-	case instr7:					  // JNZ Rn, Offset8
+	case jnz_rn_offset8:					  // JNZ Rn, Offset8
 		LD_A_MAR();
 		LD_MAR_IR0_1();
 		RDR();
@@ -199,7 +201,7 @@ void execute()
 		if ( FLAG_ZERO() )
 			ADD();
 		break;	// .. a funcionar
-	case instr8:					  // DJNZ Rn, Offset8
+	case djnz_rn_offset8:					  // DJNZ Rn, Offset8
 		LD_A_MAR();
 		LD_MAR_IR0_1();
 		RDR();
@@ -211,24 +213,24 @@ void execute()
 		if ( FLAG_ZERO() )
 			ADD();
 		break;	 // .. a funcionar
-	case instr9:					 // PUSH Rn
+	case push_rn:					 // PUSH Rn
 		LD_MAR_IR0_1();
 		RDR();
 		LD_MAR_SP();
 		WDD();
 		INC_SP();
 		break;   // .. a funcionar
-	case instr10:					 // POP Rn
+	case pop_rn:					 // POP Rn
 		DEC_SP();
 		LD_MAR_SP();
 		RDD();
 		LD_MAR_IR0_1();
 		WDR();
 		break;	// .. a funcionar
-	case instr11:					 // SJMP Offset8
+	case sjmp_offset8:					 // SJMP Offset8
 		ADD();
 		break;	// .. a funcionar
-	case instr12:					 // LCALL c_addr
+	case lcall_caddr:					 // LCALL c_addr
 		LD_TMP_MAR();
 		LD_MAR_SP();
 		LD_MBR_PC0_7();
@@ -240,7 +242,7 @@ void execute()
 		LD_PC_CADDR();
 		INC_SP();
 		break;	// .. a funcionar
-	case instr13:
+	case ret:
 		DEC_SP();					 // RET
 		LD_MAR_SP();
 		RDD();
@@ -251,7 +253,7 @@ void execute()
 		LD_PC_SP_ALL();
 		break;	// .. a funcionar
 
-	case stop:
+	case hack_to_stop:
 		END();
 		break;
 		
@@ -306,7 +308,7 @@ void loadProgram()
 	//
 	// EPILOGUE
 
-	// sjmp $ (2 instructions) / stop
+	// sjmp $ (2 instructions) / hack_to_stop
 	// CODE[14] = convDecimal("11100000");
 	// CODE[15] = 0xFE;
 	CODE[14] = convDecimal("01010000");
