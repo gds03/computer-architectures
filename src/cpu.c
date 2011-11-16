@@ -15,6 +15,8 @@
 
 
 
+
+
 /* 
 	Opcode
 */
@@ -32,6 +34,7 @@
 #define instr11 0x0E	// 1110
 #define instr12 0x0C	// 1100
 #define instr13 0x01	// 0001
+#define stop 0x05		// 0101
 
 /* 
 	Registers
@@ -48,6 +51,7 @@ byte RAM[DIM_RAM];		// RAM
 byte REG[4];			// Registers [0..3]
 byte CODE[DIM_CODE];	// CODE
 word PC;				// Program Counter 			
+word SHUTDOWN;
 
 /* 
 	Operators From EFI
@@ -57,8 +61,8 @@ word PC;				// Program Counter
 void RESET() { PC = 0; }
 void INC_PC() { PC = (PC + 1) & 0x7FF; }				// & 0111 1111 1111
 void RDC() { MAR = CODE[PC]; }							// Read Code -> MAR = Code[PC]
-void LD_MBR_PC0_7() { MBR = PC & 0xFF; }				// Carrega parte baixa (2 bytes do PC) para MBR
-void LD_MBR_PC8_10() { MBR = ( PC & 0x700 ) >> 8; }		// Carrega parte alta (3 bits do PC) para MBR
+void LD_MBR_PC0_7() { MBR = PC & 0xFF; }				// Loads PC Low part (2bytes) to MBR
+void LD_MBR_PC8_10() { MBR = ( PC & 0x700 ) >> 8; }		// Loads PC High part (3 bits) to MBR
 
 /* MAR - stores the memory address from which data will be fetched to the CPU, or the address to which data will be sent and stored. */  
 void WDD() { RAM[MAR] = MBR; }	// Write data
@@ -103,7 +107,8 @@ void DEC_MBR() { MBR = MBR - 1; }
 byte DOIS_BYTES() { return ((IR >> 4) & 0x01) == 0; }
 byte FLAG_ZERO() { return A; }
 
-
+void START() { SHUTDOWN = 0; }
+void END()   { SHUTDOWN = 1; }
 
 /* ALU */
 
@@ -245,7 +250,13 @@ void execute()
 		RDD();
 		LD_PC_SP_ALL();
 		break;	// .. a funcionar
-	}
+
+	case stop:
+		END();
+		break;
+		
+	
+	}	
 }
 
 /* Program */
@@ -295,9 +306,11 @@ void loadProgram()
 	//
 	// EPILOGUE
 
-	// sjmp $ (2 instructions)
-	CODE[14] = convDecimal("11100000");
-	CODE[15] = 0xFE;
+	// sjmp $ (2 instructions) / stop
+	// CODE[14] = convDecimal("11100000");
+	// CODE[15] = 0xFE;
+	CODE[14] = convDecimal("01010000");
+	CODE[15] = 0;
 
 	//
 	// LOOP_INSIDE
@@ -396,11 +409,11 @@ void loadProgram()
 
 void cpu()
 {
-   for ( ; ; )
-   {
-     fetch();
-     execute();
-   }
+	while( !SHUTDOWN )
+    {
+      fetch();
+      execute();
+    }
 }
 
 void initArray()	  
@@ -411,15 +424,19 @@ void initArray()
 	}
 }
 
+
+
 void main()
 {
+	START();
+
 	RESET();
 	INIT_SP();
 	loadProgram();
 	initArray();
 	cpu();
 
-
+	printf("Result value: %c \n", RAM[1]);
 	printf("Please hit some key to close the program");
 	getchar();
 }

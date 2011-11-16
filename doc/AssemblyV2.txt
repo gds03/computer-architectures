@@ -26,8 +26,8 @@ sjmp $				; here we must consult RAM[1]					<-
 
 
 LOOP_INSIDE:
-mov r2, addr0		; r2 is used as base, to add with the index		<- 9
-add r2, r1			; base + i										<- 10
+mov r2, addr0		; r2 is used as base, to add with the index		<- 9		30
+add r2, r1			; base + i										<- 10   	31 ...
 mov r3, @r2			; r3 contains array[i]							<- 11
 
 push r3																<- 12
