@@ -1,6 +1,6 @@
 mov r2, addr2	; r2 = 100  --- OK
 mov r3, #100	; r3 = 100 (variavel de controlo DJNZ) --- OK
-mov r1, #0		; r1 = 0 (indice) --- OK
+mov r1, #0		; r1 = 0 (indice - i) --- OK
 
 FOR:
 

@@ -1,0 +1,65 @@
+
+mov r0, #100		; memory pointer of array
+push r0				; enqueue
+
+---
+
+Function ACUMULA (receives by parameter pointer to array)
+
+---
+
+pop r0				; dequeue - recieve the start position of array
+
+mov r1, #0
+push r1				; enqueue - Variavel local c = 0
+mov r1, #100		; local variable i (inverse order)
+
+
+FOR_LOOP:
+
+djnz r1, LOOP_INSIDE ; break condition of for
+EPILOGUE:			
+pop r0				; r0 contains ACUMULA result!
+sjmp $
+
+
+LOOP_INSIDE:
+mov r2, r0			; r2 is used as base, to add with the index
+add r2, r1			; base + i
+mov r3, @r2			; r3 contains array[i]
+
+mov r4, r3			; r4 is just to make the compare
+sub r4, r1
+jnz r4, IF_INSIDE	; array[i] - i != 0
+sjmp FOR_LOOP
+
+IF_INSIDE:
+pop r4				; dequeue - r4 contains the updated c
+push r4				; enqueue - c
+push r3				; enqueue - array[i]
+lcall SOMA			; enqueue - pc
+push r4				; enqueue - c (c = SOMA(array[i], c))
+		
+sjmp FOR_LOOP
+
+
+---
+
+Function SOMA (recebe array[i] e c nos argumentos)
+
+---
+
+SOMA:
+pop r2				; dequeue - pc
+pop r3				; dequeue - array[i]
+pop r4				; dequeue - c
+
+add r4, r3			; SUM is made here and is restored on r4!
+
+push r2				; enqueue - pc
+ret					; dequeue - pc
+
+
+
+
+
