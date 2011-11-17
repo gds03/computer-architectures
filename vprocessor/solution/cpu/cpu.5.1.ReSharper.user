@@ -1,0 +1,58 @@
+<Configuration>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:convertions.h/l:..?..?src?convertions.h" caret="164" fromTop="9" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="1213" fromTop="10" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="7411" fromTop="14" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="7895" fromTop="8" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="7528" fromTop="13" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="8099" fromTop="17" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="6729" fromTop="4" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="6729" fromTop="2" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="8828" fromTop="22" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="8828" fromTop="23" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="8829" fromTop="23" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="8719" fromTop="17" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="8739" fromTop="10" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="6729" fromTop="17" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="6729" fromTop="16" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="6729" fromTop="18" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="9096" fromTop="17" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="8954" fromTop="6" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="6729" fromTop="14" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="9067" fromTop="10" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="6729" fromTop="26" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="6729" fromTop="22" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="6827" fromTop="17" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:convertions.h/l:..?..?src?convertions.h" caret="29" fromTop="2" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="283" fromTop="4" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="244" fromTop="12" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="6729" fromTop="21" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="742" fromTop="20" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="1281" fromTop="13" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="9192" fromTop="15" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="928" fromTop="4" />
+      <File id="6C5B4F7D-ABFB-4D10-9A9C-18390EFD636A/f:cpu.c/l:..?..?src?cpu.c" caret="1125" fromTop="8" />
+    </RecentEdits>
+  </RecentFiles>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+  <UnitTestRunnerNUnit>
+    <NUnitInstallDir IsNull="False">
+    </NUnitInstallDir>
+    <UseAddins>Never</UseAddins>
+  </UnitTestRunnerNUnit>
+</Configuration>
