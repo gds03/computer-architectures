@@ -1,0 +1,19 @@
+		.s
+
+as --gstabs -o func.o func.s
+
+
+
+		.c
+
+gcc -g -c -o main.o main.c
+
+
+
+		.exe
+
+gcc -g -o program.exe main.o func.o
+
+
+
+insight » Debugger
