@@ -22,7 +22,7 @@ toUpperSelective:
 	push edi		
 	push ecx				/* ----------------------------------------- */
 	
-	mov dword ptr[ebp-4], 0			/* int subtitutedCharsCount 		*/
+	mov dword ptr[ebp-4], 0			/* int subtitutedCharsCount = 0		*/
 	mov dword ptr[ebp-8], edi		/* char* strOrigin = str			*/
 	mov esi, [ebp + 12]				/* esi -> selectChars (source)		*/
 	mov edi, [ebp + 8]				/* edi -> str 		  (dest)		*/

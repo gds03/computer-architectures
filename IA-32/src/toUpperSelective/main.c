@@ -21,13 +21,13 @@ int toUpperSelective(char* str, const char* selectChars)
 	char* strOrigin = str;
 	
 	for(	; *selectChars != '\0'; selectChars++) {
-		for(	; *strOrigin != '\0'; strOrigin++)  {
-			if(*strOrigin == *selectChars) {
-				*strOrigin = *strOrigin - ('a'-'A');
+		for(	; *str != '\0'; str++)  {
+			if(*str == *selectChars) {
+				*str = *str - ('a'-'A');
 				subtitutedCharsCount++;
 			}		
 		}
-		strOrigin = str;
+		str = strOrigin;
 	}
 	return subtitutedCharsCount;
 }

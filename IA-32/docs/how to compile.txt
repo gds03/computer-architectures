@@ -1,19 +1,23 @@
-		.s
+.s (Compile the callee "routine in assembly")
 
-as --gstabs -o func.o func.s
-
-
-
-		.c
-
-gcc -g -c -o main.o main.c
+	as --gstabs -o func.o func.s		
 
 
+.c (Compile the caller "main")
 
-		.exe
-
-gcc -g -o program.exe main.o func.o
-
+	gcc -g -c -o main.o main.c
 
 
-insight » Debugger
+.out (executable in out extension "link two o files")
+
+	gcc -g -o app.out main.o func.o
+
+
+.exe
+
+	gcc -g -o program.exe main.o func.o
+
+
+Debug assembly + C
+
+	insight
