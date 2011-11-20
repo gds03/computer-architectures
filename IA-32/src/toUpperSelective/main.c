@@ -4,12 +4,17 @@ int toUpperSelective(char* str, const char* selectChars);
 
 int main() 
 {
-	char str[] = "remembering toUpperSelective exercise..";
+	char str[] = "remembering toUpperSelective";
 	const char* findChars = "re";
 	
+	printf("Source String: %s \n", str);
+	printf("Characters to capitalize: %s \n", findChars);
+	
 	int result = toUpperSelective(str, findChars);
-	printf("Result Expected is %d and got %d \n", 14, result);
-	printf("Printing result: %s \n", str);
+	
+	printf("Final String: %s \n", str);
+	printf("Total characters capitalized: %d \n", result);
+	
 	getchar();
 	return 0;
 }

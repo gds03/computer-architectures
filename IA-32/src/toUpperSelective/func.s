@@ -20,12 +20,14 @@ toUpperSelective:
 							
 	push esi				/* ------------- Registers used  ----------- */
 	push edi		
-	push ecx				/* ----------------------------------------- */
+							/* ----------------------------------------- */
+	
+	mov esi, [ebp + 12]				/* esi -> selectChars (source)		*/
+	mov edi, [ebp + 8]				/* edi -> str 		  (dest)		*/
 	
 	mov dword ptr[ebp-4], 0			/* int subtitutedCharsCount = 0		*/
 	mov dword ptr[ebp-8], edi		/* char* strOrigin = str			*/
-	mov esi, [ebp + 12]				/* esi -> selectChars (source)		*/
-	mov edi, [ebp + 8]				/* edi -> str 		  (dest)		*/
+	
 	
 	for_loop1:		
 		for_loop1_condition:
@@ -61,9 +63,9 @@ toUpperSelective:
 	prepare_end:
 		mov eax, [ebp-4]
 		
-		pop ecx
 		pop edi
 		pop esi
+		
 		add esp, 8					/* Clear local variables */
 		pop ebp						/* Restore caller stack frame pointer */
 		ret
