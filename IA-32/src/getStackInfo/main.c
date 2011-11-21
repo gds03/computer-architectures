@@ -12,6 +12,14 @@ void* getStackInfo(int* stackFrameSize);
 int main()
 {
 	int i = 0;
+	/*
+	int x = 4;
+	int a = 4;
+	int b = 4;
+	int c = 4;
+	int d = 4;
+	int e = 0;
+	*/
 	int* stackSize = &i;
 	void* memoryPtr;
 	
