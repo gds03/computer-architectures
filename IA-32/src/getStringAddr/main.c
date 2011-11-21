@@ -1,13 +1,13 @@
 #include <stdio.h>
-#include <stdarg.h>
-#include <string.h>
+// #include <stdarg.h>
+// #include <string.h>
 
-// int getStringAddr(char *dst[], int size, const char *sample, ...);
+int getStringAddr(char *dst[], int size, const char *sample, ...);
 
 /*
+
 int getStringAddr(char *dst[], int size, const char *sample, ...)
 {
-	int dstIdx = 0;
 	int result = 0;
 	va_list arguments;
 	char* str;
@@ -21,8 +21,12 @@ int getStringAddr(char *dst[], int size, const char *sample, ...)
 			break;
 		
 		if( strstr(str, sample) != NULL ) {
-			dst[dstIdx++] = str;
+			dst[result] = str;
 			result++;
+			
+			// There are not available space, so we return
+			if(result == size)
+				break;
 		}
 	}
 	while(1);
@@ -33,6 +37,7 @@ int getStringAddr(char *dst[], int size, const char *sample, ...)
 }
 
 */
+
 
 int main()
 {
@@ -58,8 +63,7 @@ int main()
 	for(	; i < result; i++) {
 		printf("%s \n", dst[i]);
 	}
-	
-
+	getchar();
 	return 0;
 }
 

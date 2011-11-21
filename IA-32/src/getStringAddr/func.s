@@ -10,42 +10,53 @@ getStringAddr:
 		push ebp			/* Save caller stack base pointer   */
 		mov ebp, esp		/* ebp now refers the callee 		*/
 		
-		push esi			
-		push edi
+		push esi			/* Save caller esi register */			
+		push edi			/* Save caller edi register */
 
-		mov esi, [ebp+16]	/* Esi points to *sample */
-		mov edi, [ebp+20]	/* First var str parameter */
+		mov esi, [ebp+16]	/* ESI -> *Sample 		*/
+		mov edi, [ebp+20]	/* EDI -> *var_arg[0]   */
 		
 		mov eax, 0			/* result = 0 */
+		mov ecx, 0			/* ECX used for indexing var_arg */
 		
 	
 	loop:
 		
 		loop_break_if:
-			cmp byte ptr[edi], 0
+			cmp edi, 0		/* if(str == NULL) */
 			je end_loop
 		
 		loop_if:
-			push eax			/* save current result */
-			push [esi]
-			push [edi]
+			push eax			
+			push ecx
+			push esi
+			push edi
 			
-			call strstr
-			
-			add esp, 8			/* Discart parameters used by strstr (__cdecl)
+			call _strstr		/* call C library function */
 			cmp eax, 0
-			pop eax				/* restore result */
-			je loop_advance_arg
 			
-			loop_if_inside:
-				push esi
-				mov esi, [ebp+8+4*eax]
-				mov [esi], edi
-				pop esi
-				inc eax		
+			pop edi
+			pop esi
+			pop ecx
+			pop eax				/* restore result */
+			je loop_advance_arg	/* strstr(str, sample) != NULL */
+			
+			loop_if_inside_1:
+				push esi				/* Save sample on stack */
+				
+				mov esi, [ebp+8]		/* Esi now points to dst */
+				mov [esi+4*eax], edi	/* dst[result] = var_arg[ecx] */
+				inc eax
+				
+				pop esi					/* Restore sample from stack */
+				
+				loop_if_inside_2:
+					cmp eax, [ebp+12]
+					je end_loop				
 		
 	loop_advance_arg:
-		add edi, 4		
+		inc ecx
+		mov edi, [ebp+20+ecx*4]		/* Move edi to the next var_arg parameter */	
 		jmp loop	
 	
 	end_loop: 
