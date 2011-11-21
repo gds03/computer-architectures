@@ -17,7 +17,7 @@ int main()
 	
 	// printf("Printing local variable i = %d \n", i);
 	memoryPtr = getStackInfo(stackSize);
-	printf("Stack frame starts at %x \n", memoryPtr);
+	printf("Stack frame starts at 0x%x \n", memoryPtr);
 	printf("Stack frame size is %d bytes \n", *stackSize);
 	getchar();
 
