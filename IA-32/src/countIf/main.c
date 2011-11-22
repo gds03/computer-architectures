@@ -5,10 +5,12 @@ int comparator_for_integers(const char* a, const char* b) {
 	return *a - *b;
 }
 
-/*
+
 int countIf(const void * data, int nelem, int size, 
-			const void * sample, int (*match)(const void *, const void *));
-*/ 		
+	    const void * sample, 
+	    int (*match)(const void *, const void *));
+
+/* 		
 			
 int countIf(const void * data, int nelem, int size, 
 			const void * sample, 
@@ -29,7 +31,7 @@ int countIf(const void * data, int nelem, int size,
 }
 
 
-
+*/
 
 int main()
 {
@@ -41,7 +43,7 @@ int main()
 	
 	func = &comparator_for_integers;	
 	
-	int result = countIf(data, 6, 1, search, func);
+	int result = countIf(data, 6, sizeof(char), search, func);
 	printf("The result must be 2 and got %d \n", result);
 	getchar();
 	
